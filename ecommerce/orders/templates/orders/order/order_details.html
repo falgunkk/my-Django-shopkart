@@ -1,0 +1,60 @@
+<!-- <script type="text/javascript">
+	expand = true
+	function test_script(total, order_no){
+		if (expand) {
+            document.getElementsByTagName('button')[order_no-1].innerHTML = total
+			expand = false
+		} else {
+		    document.getElementsByTagName('button')[order_no-1].innerHTML = "Show sum"
+		    expand = true
+    	}
+	}
+</script> -->
+{% load staticfiles %}
+{% load static %}
+<head>
+    <script type="text/javascript" src={% static 'js/show_sum.js' %}></script>
+    <link rel="stylesheet" type="text/css" href={% static 'css/styles.css' %}>
+</head>
+<body>
+	<button><a href="/"> Back to Home </a></button>
+	<center>Orders list</center>
+	<table class="table table-striped table-hover">
+	<thead style="background-color: #5AC8FA">
+		<tr>
+			<th>Order No:</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Email</th>
+			<th>Address</th>
+			<th>Postal Code</th>
+			<th>City</th>
+			<th>Paid</th>
+			<th>product name<br>price<br>quantity</th>
+			<th>Total:</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for order in order_detail %}
+		<tr>
+		    <td>{{ order.order_no }}</td>
+		    <td>{{ order.order.first_name }}</td>
+		    <td>{{ order.order.last_name }}</td>
+		    <td>{{ order.order.email }}</td>
+		    <td>{{ order.order.address }}</td>
+		    <td>{{ order.order.postal_code }}</td>
+		    <td>{{ order.order.city }}</td>
+		    <td>{{ order.order.paid }}</td>
+		    <td>
+		        {{ order.items.product }}<br>
+		        {{ order.items.quantity}}<br>
+		        {{ order.items.price}}<br>
+		    </td>
+		    <td> 
+		        <button onclick="test_script({{ order.total }}, {{ order.order_no }})">Show sum</button>
+		    </td>
+		</tr>
+	{% endfor %}
+	</tbody>
+	</table>
+</body>
