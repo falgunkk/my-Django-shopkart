@@ -4,6 +4,7 @@ from .models import OrderItem
 from .models import Order
 from .forms import OrderCreateForm
 from cart.cart import Cart
+from django.core.mail import send_mail
 
 
 def order_create(request):
@@ -23,6 +24,8 @@ def order_create(request):
                     quantity=item['quantity']
                 )
             cart.clear()
+        # send mail to the current user
+        send()
         return render(request, 'orders/order/created.html', {'order': order})
     else:
         form = OrderCreateForm()
@@ -42,6 +45,16 @@ def order_details(request):
     # import pdb; pdb.set_trace()
     print order_detail
     return render(request, 'orders/order/order_details.html', {'order_detail': order_detail})
+
+def send():
+    # import pdb; pdb.set_trace()
+    send_mail(
+    'Ordered',
+    'ordered.',
+    'alexsam374@gmail.com',
+    ['falgunbalachandran@gmail.com'],
+    fail_silently=False
+    )
 
 def test(request):
     dicts_array = [{'order':"first", 'items': "second"},{'order':"third", 'items': "fourth"}]
