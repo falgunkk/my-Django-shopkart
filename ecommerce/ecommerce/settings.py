@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
+from __future__ import absolute_import
 
 import os
 
@@ -28,7 +29,6 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'clear_cache',
     'shop',
     'cart',
-    'orders'
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -133,8 +133,27 @@ CART_SESSION_ID = 'cart'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'orders/static')]
 
+# EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'tonyja12123@gmail.com'
 EMAIL_HOST_PASSWORD = '12345678abcd'
+
+
+CELERY_BROKER_URL = 'pyamqp://guest@localhost//'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Makassar'
+
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'task-number-one': {
+        'task': 'orders.tasks.task_number_one',
+        'schedule': crontab()
+    }
+}
